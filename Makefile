@@ -1,8 +1,9 @@
 CC=cc
-SRC= main.c
+SRC= main.c parsing.c
+HEADER= parsing.h
 OBJ= flower
 
 install:
-	$(CC) $(SRC) -o $(OBJ)
+	$(CC) $(SRC) $(HEADER) -o $(OBJ)
 clean:
 	rm $(OBJ)
