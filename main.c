@@ -35,7 +35,7 @@ main() {
   if (ext != NULL) {
     strcpy(ext, ".html");
   }
-  
+    include_style();
   FILE *fw = fopen(output_file, "w");
   if (fw == NULL) {
     fprintf(stderr, "Galat membuat keluaran berkas %s\n", output_file);
