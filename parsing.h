@@ -1,12 +1,14 @@
 #ifndef PARSING_H
 #define PARSING_H
 
-#define HEADING 1
-#define PARAGRAPH 2
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
+enum ElementType {
+  HEADING = 1,
+  PARAGRAPH = 2
+};
 
 typedef struct {
   int type;
