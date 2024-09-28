@@ -13,7 +13,25 @@ MarkdownElement detect_md(char *line) {
         }
         element.type = count;
         element.content = strdup(line + count + 2);
-    } else {
+    } else if (strstr(line, "**")) {
+      char *startbold = strstr(line, "**");
+      char *endbold = strstr(startbold + 2, "**");
+      if ( startbold && endbold ) {
+	*startbold = '\0';
+	*endbold = '\0';
+
+	size_t before_bold_len = strlen(line);
+	size_t bold_len = strlen(startbold + 2);
+	size_t after_bold_len = strlen(endbold + 2);
+	
+      element.type = BOLD;
+      element.content = malloc(before_bold_len + bold_len + after_bold_len + 14);
+      if(element.content) {
+	snprintf(element.content, before_bold_len + bold_len + after_bold_len + 14, "%s<b>%s</b>%s", line, startbold + 2, endbold + 2);
+      }
+    }
+    }
+    else {
         element.type = PARAGRAPH;
         element.content = strdup(line);
     }
@@ -79,7 +97,10 @@ void parsing(FILE *file, FILE *fw) {
         MarkdownElement element = detect_md(line);
         if (element.type >= 1 && element.type <= 6) {
             fprintf(fw, "<h%d>%s</h%d>\n", element.type, element.content, element.type);
-        } else if (element.type == PARAGRAPH) {
+        } else if (element.type == BOLD) {
+	  fprintf(fw, "%s\n", element.content);
+	}
+	else if (element.type == PARAGRAPH) {
             fprintf(fw, "<p>%s</p>\n", element.content);
         }
         free(element.content);
