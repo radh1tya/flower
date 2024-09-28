@@ -18,17 +18,21 @@ MarkdownElement detect_md(char *line) {
   }
   return element;
 }
+
 void parsing(FILE *file, FILE *fw) {
+      fprintf(fw, "<html>\n<head>\n<link rel=\"stylesheet\" href=\"style.css\">\n</head>\n");
+    fprintf(fw, "<body>\n");
+    
   char line[256];
   while (fgets(line, sizeof(line), file)) {
+     line[strcspn(line, "\n")] = 0;
     MarkdownElement element = detect_md(line);
-
     if ( element.type >= 1 && element.type <= 6 ) {
       fprintf(fw, "<h%d>%s</h%d>\n", element.type, element.content, element.type);
     } else if (element.type == PARAGRAPH) {
       fprintf(fw, "<p>%s</p>\n", element.content);
     }
-
     free(element.content);
   }
+    fprintf(fw, "</body>\n</html>\n");
 }
