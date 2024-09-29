@@ -1,2 +1,5 @@
-flower - md -> html
-===============================
+flower - static site generator
+
+```sh
+$ makefile
+```
