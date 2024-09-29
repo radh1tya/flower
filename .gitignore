@@ -1,0 +1,6 @@
+# Object file
+*.o
+*.so
+*.lib
+*.elf
+*.out

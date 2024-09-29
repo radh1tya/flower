@@ -24,6 +24,7 @@ typedef struct {
 } MarkdownElement;
 
 void parsing(FILE *file, FILE *fw);
+void include_style(void);
 
 MarkdownElement detect_md(char *line);
 #endif
