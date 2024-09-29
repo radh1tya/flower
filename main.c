@@ -2,12 +2,13 @@
 #include <stdlib.h>
 #include <dirent.h>
 #include "parsing.h"
+
 int is_markdown_file(const char *filename) {
   const char *ext = strrchr(filename, '.');
   return (ext && strcmp(ext, ".md") == 0);
 }
-int
-main() {
+
+int main() {
   struct dirent *de;
   DIR *dr = opendir("post");
   if ( dr == NULL ) {

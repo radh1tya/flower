@@ -111,7 +111,7 @@ MarkdownElement detect_md(char *line) {
 
     return element;
 }
-void include_style() {
+void include_style(void) {
     DIR *dr_css = opendir("themes");
 
     if (dr_css == NULL) {
