@@ -4,6 +4,23 @@
 #include <dirent.h>
 #include "parsing.h"
 
+void do_bold() {
+  MarkdownElement element;
+  char *line;
+  char *current = line;
+  char *output = element.content;
+
+  current += 2;
+            output += sprintf(output, "<b>");
+            while (strncmp(current, "**", 2) != 0 && *current != '\0') {
+                *output++ = *current++;
+            }
+            if (strncmp(current, "**", 2) == 0) {
+                current += 2;
+                output += sprintf(output, "</b>"); 
+            }
+	    
+}
 MarkdownElement detect_md(char *line) {
     MarkdownElement element;
     element.type = PARAGRAPH;
@@ -22,15 +39,7 @@ MarkdownElement detect_md(char *line) {
     char *output = element.content;
     while (*current != '\0') {
         if (strncmp(current, "**", 2) == 0) {
-            current += 2;
-            output += sprintf(output, "<b>");
-            while (strncmp(current, "**", 2) != 0 && *current != '\0') {
-                *output++ = *current++;
-            }
-            if (strncmp(current, "**", 2) == 0) {
-                current += 2;
-                output += sprintf(output, "</b>"); 
-            }
+	  do_bold();
         }
       else if (*current == '>') {
             current++;
