@@ -61,7 +61,7 @@ MarkdownElement detect_md(char *line) {
             count++;
         }
         element.type = count;
-        snprintf(element.content, strlen(line), "%s", line + count + 2);
+        snprintf(element.content, strlen(line), "%s", line + count + 1);
         return element;
     }
     
