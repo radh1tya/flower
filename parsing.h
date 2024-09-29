@@ -13,7 +13,9 @@ enum ElementType {
   HEADING_5 = 5,
   HEADING_6 = 6,
   PARAGRAPH = 10,
-  BOLD = 11
+  BOLD = 11,
+  ITALIC = 12,
+  BLOCKQUOTE = 13
 };
 
 typedef struct {
