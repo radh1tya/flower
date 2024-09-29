@@ -4,28 +4,57 @@
 #include <dirent.h>
 #include "parsing.h"
 
-void do_bold() {
-  MarkdownElement element;
-  char *line;
-  char *current = line;
-  char *output = element.content;
+MarkdownElement do_bold(char **current) {
+    MarkdownElement element;
+    element.content = malloc(256);
+    char *output = element.content;
 
-  current += 2;
-            output += sprintf(output, "<b>");
-            while (strncmp(current, "**", 2) != 0 && *current != '\0') {
-                *output++ = *current++;
-            }
-            if (strncmp(current, "**", 2) == 0) {
-                current += 2;
-                output += sprintf(output, "</b>"); 
-            }
-	    
+    *current += 2;
+    output += sprintf(output, "<b>");
+    
+    while (strncmp(*current, "**", 2) != 0 && **current != '\0') {
+        *output++ = **current;
+        (*current)++;
+    }
+    
+    if (strncmp(*current, "**", 2) == 0) {
+        *current += 2;
+        output += sprintf(output, "</b>");
+    }
+
+    *output = '\0';
+    element.type = BOLD;
+    return element;
 }
+
+MarkdownElement do_italic(char **current) {
+    MarkdownElement element;
+    element.content = malloc(256);
+    char *output = element.content;
+
+    (*current)++;
+    output += sprintf(output, "<i>");
+
+    while (**current != '_' && **current != '\0') {
+        *output++ = **current;
+        (*current)++;
+    }
+
+    if (**current == '_') {
+        (*current)++;
+        output += sprintf(output, "</i>");
+    }
+
+    *output = '\0';
+    element.type = ITALIC;
+    return element;
+}
+
 MarkdownElement detect_md(char *line) {
     MarkdownElement element;
     element.type = PARAGRAPH;
-    element.content = malloc(strlen(line) * 2);
-
+    element.content = malloc(strlen(line) * 10);
+    
     if (line[0] == '#') {
         int count = 0;
         while (line[count] == '#') {
@@ -35,55 +64,44 @@ MarkdownElement detect_md(char *line) {
         snprintf(element.content, strlen(line), "%s", line + count + 2);
         return element;
     }
+    
     char *current = line;
     char *output = element.content;
+
     while (*current != '\0') {
         if (strncmp(current, "**", 2) == 0) {
-	  do_bold();
+            MarkdownElement boldElement = do_bold(&current);
+            strcpy(output, boldElement.content);
+            output += strlen(boldElement.content);
+            free(boldElement.content);
         }
-      else if (*current == '>') {
+        else if (*current == '>') {
             current++;
             output += sprintf(output, "<blockquote>");
-	    while (*current != '\0') {
-	      if (strncmp(current, "**", 2) == 0) {
-		current += 2;
-		output += sprintf(output, "<b>");
-		while (strncmp(current, "**", 2) != 0 && *current != '\0') {
-		  *output++ = *current++;
-		}
-		if (strncmp(current, "**", 2) == 0) {
-		  current += 2;
-		  output += sprintf(output, "</b>");
-		}
-	      }
-	        else if (*current == '_') {
-            current++;
-            output += sprintf(output, "<i>");
-            while (*current != '_' && *current != '\0') {
-                *output++ = *current++;
+            while (*current != '\0' && *current != '\n') {
+                if (strncmp(current, "**", 2) == 0) {
+                    MarkdownElement boldElement = do_bold(&current);
+                    strcpy(output, boldElement.content);
+                    output += strlen(boldElement.content);
+                    free(boldElement.content);
+                }
+                else if (*current == '_') {
+                    MarkdownElement italicElement = do_italic(&current);
+                    strcpy(output, italicElement.content);
+                    output += strlen(italicElement.content);
+                    free(italicElement.content);
+                }
+                else {
+                    *output++ = *current++;
+                }
             }
-            if (*current == '_') {
-                current++;
-                output += sprintf(output, "</i>");
-            }
+            output += sprintf(output, "</blockquote>");
         }
-		else {
-		*output++ = *current++;
-	      }
-	    }
-    output += sprintf(output, "</blockquote>");
-      }
-	
         else if (*current == '_') {
-            current++;
-            output += sprintf(output, "<i>");
-            while (*current != '_' && *current != '\0') {
-                *output++ = *current++;
-            }
-            if (*current == '_') {
-                current++;
-                output += sprintf(output, "</i>");
-            }
+            MarkdownElement italicElement = do_italic(&current);
+            strcpy(output, italicElement.content);
+            output += strlen(italicElement.content);
+            free(italicElement.content);
         }
         else {
             *output++ = *current++;
@@ -93,7 +111,6 @@ MarkdownElement detect_md(char *line) {
 
     return element;
 }
-
 void include_style() {
     DIR *dr_css = opendir("themes");
 
@@ -149,7 +166,7 @@ void parsing(FILE *file, FILE *fw) {
 
     char line[256];
     while (fgets(line, sizeof(line), file)) {
-        line[strcspn(line, "\n")] = 0;  // Menghapus karakter newline
+        line[strcspn(line, "\n")] = 0;
         MarkdownElement element = detect_md(line);
         if (element.type >= 1 && element.type <= 6) {
             fprintf(fw, "<h%d>%s</h%d>\n", element.type, element.content, element.type);
@@ -158,8 +175,8 @@ void parsing(FILE *file, FILE *fw) {
         } else if (element.type == ITALIC) {
             fprintf(fw, "%s\n", element.content);
         } else if (element.type == BLOCKQUOTE) {
-	  fprintf(fw, "%s\n", element.content);
-	} else if (element.type == PARAGRAPH) {
+            fprintf(fw, "%s\n", element.content);
+        } else if (element.type == PARAGRAPH) {
             fprintf(fw, "<p>%s</p>\n", element.content);
         }
         free(element.content);
