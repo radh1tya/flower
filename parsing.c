@@ -124,7 +124,7 @@ void include_style(void) {
     while ((dir_css = readdir(dr_css)) != NULL) {
         if (strcmp(dir_css->d_name, "style.css") == 0) {
             style_found = 1;
-            char src_path[256];
+            char src_path[265];
             snprintf(src_path, sizeof(src_path), "themes/%s", dir_css->d_name);
 
             FILE *src = fopen(src_path, "r");

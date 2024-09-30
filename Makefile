@@ -1,6 +1,6 @@
 # Compiler option
 CC     = cc
-FLAG   = -Os -Wall -Wextra -Wpedantic \
+FLAG   = -Os -Wall -Werror -Wextra -Wpedantic \
 		 -std=gnu2x -Wunreachable-code \
 		 -Wconversion
 UNLINK = -c

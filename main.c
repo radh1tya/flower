@@ -20,7 +20,7 @@ int main() {
     if (de->d_type == DT_DIR) continue;
 
     if (is_markdown_file(de->d_name)) {
-  char input_file[256];
+  char input_file[265];
   snprintf(input_file, sizeof(input_file), "post/%s", de->d_name);
       
   FILE *fp = fopen(input_file, "r");
@@ -29,7 +29,7 @@ int main() {
     exit(1);
   }
 
-  char output_file[256];
+  char output_file[265];
   snprintf(output_file, sizeof(output_file), "public/%s", de->d_name);
 
   char *ext = strrchr(output_file, '.');
