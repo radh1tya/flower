@@ -1,7 +1,7 @@
 # Compiler option
 CC     = cc
-FLAG   = -O3 -Wall -Werror -Wextra -Wpedantic \
-		 -std=gnu23 -Wunreachable-code -Wc23-extensions \
+FLAG   = -Os -Wall -Wextra -Wpedantic \
+		 -std=gnu2x -Wunreachable-code \
 		 -Wconversion
 UNLINK = -c
 
