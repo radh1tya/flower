@@ -20,11 +20,11 @@ int create_the_folder() {
     return 1;
 }
   if (mkdir("public", 0755) == -1) {
-    perror("Gak bisa bikin folder 'post'");
+    perror("Gak bisa bikin folder 'public'");
     return 1;
 }
   if (mkdir("themes", 0755) == -1) {
-    perror("Gak bisa bikin folder 'post'");
+    perror("Gak bisa bikin folder 'themes'");
     return 1;
 }
   return 0;
@@ -139,5 +139,9 @@ int main(int argc, char *argv[]) {
 
 int is_markdown_file(const char *filename) {
   const char *ext = strrchr(filename, '.');
+  if (ext == NULL) {
+	  perror("Berkas %s tidak ditemukan");
+	  return 1;
+  }
   return !strcmp(ext, ".md");
 }
