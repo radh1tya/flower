@@ -6,14 +6,12 @@ FLAG   = -Os -Wall -Werror -Wextra -Wpedantic \
 UNLINK = -c
 
 # File
-SRC    = main.c parsing.c
-OUT    = main.o parsing.o
-HEADER = parsing.h
+SRC    = src/*.c
+OUT    = *.o
 OBJ    = flower
 
 # make install
 install:
-	# $(CC) $(SRC) $(HEADER)  -o $(OBJ)
 	$(CC) $(SRC) $(FLAG) $(UNLINK)
 	$(CC) $(OUT) $(FLAG) -o $(OBJ)
 
