@@ -2,3 +2,7 @@ body {
     background-color: #FF0000;
   font-family: Arial, sans-serif;
 }
+
+code {
+    background-color: #000FFF;
+}

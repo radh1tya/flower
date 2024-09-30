@@ -15,7 +15,8 @@ enum ElementType {
   PARAGRAPH = 10,
   BOLD = 11,
   ITALIC = 12,
-  BLOCKQUOTE = 13
+  BLOCKQUOTE = 13,
+  CODE = 14
 };
 
 typedef struct {

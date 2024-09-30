@@ -4,7 +4,29 @@
 #include <dirent.h>
 #include "parsing.h"
 
-MarkdownElement do_number(char **current) {
+MarkdownElement do_code(char **current) {
+  MarkdownElement element;
+  element.content = malloc(256);
+  char *output = element.content;
+
+  (*current)++;
+  output += sprintf(output, "<code>");
+
+  while (strncmp(*current, "`", 1) != 0 && strncmp(*current, "``", 2) && **current != '\0') {
+    *output++ = **current;
+    (*current)++;
+    }
+
+  if (strncmp(*current, "``", 2) == 0) {
+    *current += 2;
+    output += sprintf(output, "</code>");
+  } else if (strncmp(*current, "`", 1) == 0) {
+    (*current)++;
+    output += sprintf(output, "</code>");
+  }
+    *output = '\0';
+    element.type = CODE;
+    return element;
 }
 MarkdownElement do_bold(char **current) {
     MarkdownElement element;
@@ -105,6 +127,12 @@ MarkdownElement detect_md(char *line) {
             output += strlen(italicElement.content);
             free(italicElement.content);
         }
+	else if (*current == '`') {
+	    MarkdownElement codeElement = do_code(&current);
+            strlcpy(output, codeElement.content,strlen(codeElement.content) + 1);
+            output += strlen(codeElement.content);
+            free(codeElement.content);
+	}
         else {
             *output++ = *current++;
         }
@@ -172,7 +200,10 @@ void parsing(FILE *file, FILE *fw) {
         MarkdownElement element = detect_md(line);
         if (element.type >= 1 && element.type <= 6) {
             fprintf(fw, "<h%d>%s</h%d>\n", element.type, element.content, element.type);
-        } else if (element.type == BOLD) {
+        } else if (element.type == CODE) {
+	  fprintf(fw, "%s\n", element.content);
+	}
+	else if (element.type == BOLD) {
             fprintf(fw, "%s\n", element.content);
         } else if (element.type == ITALIC) {
             fprintf(fw, "%s\n", element.content);
