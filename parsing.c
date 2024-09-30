@@ -71,7 +71,7 @@ MarkdownElement detect_md(char *line) {
     while (*current != '\0') {
         if (strncmp(current, "**", 2) == 0) {
             MarkdownElement boldElement = do_bold(&current);
-            strcpy(output, boldElement.content);
+            strlcpy(output, boldElement.content,sizeof(output));
             output += strlen(boldElement.content);
             free(boldElement.content);
         }
@@ -81,13 +81,13 @@ MarkdownElement detect_md(char *line) {
             while (*current != '\0' && *current != '\n') {
                 if (strncmp(current, "**", 2) == 0) {
                     MarkdownElement boldElement = do_bold(&current);
-                    strcpy(output, boldElement.content);
+                    strlcpy(output, boldElement.content,sizeof(output));
                     output += strlen(boldElement.content);
                     free(boldElement.content);
                 }
                 else if (*current == '_') {
                     MarkdownElement italicElement = do_italic(&current);
-                    strcpy(output, italicElement.content);
+                    strlcpy(output, italicElement.content,sizeof(output));
                     output += strlen(italicElement.content);
                     free(italicElement.content);
                 }
@@ -99,7 +99,7 @@ MarkdownElement detect_md(char *line) {
         }
         else if (*current == '_') {
             MarkdownElement italicElement = do_italic(&current);
-            strcpy(output, italicElement.content);
+            strlcpy(output, italicElement.content,sizeof(output));
             output += strlen(italicElement.content);
             free(italicElement.content);
         }
