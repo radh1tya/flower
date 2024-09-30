@@ -2,10 +2,20 @@
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include <sys/stat.h>
+#include <sys/types.h>
+
 #define root "post"
 
 int is_markdown_file(const char *);
 
+void create_the_folder(void) {
+  mkdir("post", 0755);
+  mkdir("public", 0755);
+  mkdir("themes", 0755);
+}
+    
 int main(void) {
   struct dirent *de;
   DIR *dr;
@@ -70,6 +80,5 @@ int main(void) {
 
 int is_markdown_file(const char *filename) {
   const char *ext = strrchr(filename, '.');
-
   return !strcmp(ext, ".md");
 }
