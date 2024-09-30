@@ -29,7 +29,6 @@ int create_the_folder() {
 }
   return 0;
 }
-    
 int main(int argc, char *argv[]) { 
   if (argc == 1) {
     fprintf(stderr, "flower\n");
@@ -55,14 +54,15 @@ int main(int argc, char *argv[]) {
 	// disimpan di heap dengan malloc()
 	// @TODO alokasi 256 bytes heap memori ke input_file
 	
-        char *input_file = malloc(256);
+	size_t input_file_len = snprintf(NULL, 0, "post/%s", de->d_name) + 1;
+        char *input_file = malloc(input_file_len);
         if (input_file == NULL) {
           fprintf(stderr, "Gagal ngalokasiin memory ke input_file\n");
           closedir(dr);
           return 1;
         }
 
-        snprintf(input_file, 256, "post/%s", de->d_name);
+        snprintf(input_file, input_file_len, "post/%s", de->d_name);
         FILE *fp = fopen(input_file, "r");
 
         if (fp == NULL) {
@@ -72,7 +72,8 @@ int main(int argc, char *argv[]) {
           return 1;
         }
 	
-        char *output_file = malloc(256);
+	size_t output_file_len = snprintf(NULL, 0, "post/%s", de->d_name) + 1;
+        char *output_file = malloc(output_file_len);
         if (output_file == NULL) {
           fprintf(stderr, "gagal ngalokasiin memory ke output_file\n");
           free(input_file);
@@ -81,7 +82,7 @@ int main(int argc, char *argv[]) {
           return 1;
         }
 
-        snprintf(output_file, 256, "public/%s", de->d_name);
+        snprintf(output_file, output_file_len, "public/%s", de->d_name);
         char *ext = strrchr(output_file, '.');
 
         if (ext != NULL) {

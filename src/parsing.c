@@ -212,6 +212,9 @@ void parsing(FILE *file, FILE *fw) {
         } else if (element.type == PARAGRAPH) {
             fprintf(fw, "<p>%s</p>\n", element.content);
         }
+	else {
+		fprintf(fw, "%s", element.content);
+	};
         free(element.content);
     }
     fprintf(fw, "</body>\n</html>\n");
