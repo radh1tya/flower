@@ -16,7 +16,11 @@ void create_the_folder(void) {
   mkdir("themes", 0755);
 }
     
-int main(void) {
+int main(int argc, char *argv[]) {
+  if ( argc > 1 && strcmp(argv[1], "-create" ) == 0) {
+    create_the_folder();
+    return 0;
+  }
   struct dirent *de;
   DIR *dr;
 
@@ -74,7 +78,7 @@ int main(void) {
       fclose(fw);
     }
   }
-
+  
   return 0;
 }
 
