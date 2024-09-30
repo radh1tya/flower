@@ -2,8 +2,12 @@
 #define PARSING_H
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 enum ElementType {
   HEADING_1 = 1,
@@ -27,4 +31,9 @@ void parsing(FILE *file, FILE *fw);
 void include_style(void);
 
 MarkdownElement detect_md(char *line);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif
