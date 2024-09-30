@@ -4,6 +4,8 @@
 #include <dirent.h>
 #include "parsing.h"
 
+MarkdownElement do_number(char **current) {
+}
 MarkdownElement do_bold(char **current) {
     MarkdownElement element;
     element.content = malloc(256);
@@ -35,12 +37,12 @@ MarkdownElement do_italic(char **current) {
     (*current)++;
     output += sprintf(output, "<i>");
 
-    while (**current != '_' && **current != '\0') {
+    while (**current != '_' && **current != '*' && **current != '\0') {
         *output++ = **current;
         (*current)++;
     }
 
-    if (**current == '_') {
+    if (**current == '_' || **current == '*' ) {
         (*current)++;
         output += sprintf(output, "</i>");
     }
@@ -71,7 +73,7 @@ MarkdownElement detect_md(char *line) {
     while (*current != '\0') {
         if (strncmp(current, "**", 2) == 0) {
             MarkdownElement boldElement = do_bold(&current);
-            strlcpy(output, boldElement.content,sizeof(output));
+            strlcpy(output, boldElement.content, strlen(boldElement.content) + 1);
             output += strlen(boldElement.content);
             free(boldElement.content);
         }
@@ -81,13 +83,13 @@ MarkdownElement detect_md(char *line) {
             while (*current != '\0' && *current != '\n') {
                 if (strncmp(current, "**", 2) == 0) {
                     MarkdownElement boldElement = do_bold(&current);
-                    strlcpy(output, boldElement.content,sizeof(output));
+                    strlcpy(output, boldElement.content, strlen(boldElement.content) + 1);
                     output += strlen(boldElement.content);
                     free(boldElement.content);
                 }
-                else if (*current == '_') {
+                else if (*current == '_' || *current == '*') {
                     MarkdownElement italicElement = do_italic(&current);
-                    strlcpy(output, italicElement.content,sizeof(output));
+                    strlcpy(output, italicElement.content, strlen(italicElement.content) + 1);
                     output += strlen(italicElement.content);
                     free(italicElement.content);
                 }
@@ -97,9 +99,9 @@ MarkdownElement detect_md(char *line) {
             }
             output += sprintf(output, "</blockquote>");
         }
-        else if (*current == '_') {
+        else if (*current == '_' || *current == '*') {
             MarkdownElement italicElement = do_italic(&current);
-            strlcpy(output, italicElement.content,sizeof(output));
+            strlcpy(output, italicElement.content,strlen(italicElement.content) + 1);
             output += strlen(italicElement.content);
             free(italicElement.content);
         }
