@@ -32,7 +32,7 @@ int create_the_folder() {
     
 int main(int argc, char *argv[]) { 
   if (argc == 1) {
-    fprintf(stderr, "flower - hobbyist static site generator\n");
+    fprintf(stderr, "flower\n");
   
     struct dirent *de;
     DIR *dr;
@@ -121,6 +121,11 @@ int main(int argc, char *argv[]) {
 
   else if (argc > 1 && strcmp(argv[1], "-help") == 0) {
     is_help();
+    return 0;
+  }
+
+  else if (argc > 1 && strcmp(argv[1], "-version") == 0) {
+    fprintf(stderr, "hobbyist static site generator - github.com/radh1tya/flower");
     return 0;
   }
 
