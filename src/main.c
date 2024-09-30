@@ -13,10 +13,21 @@ int is_markdown_file(const char *);
 void is_help(void) {
   fprintf(stderr, "-create to create the folders\n");
 }
-void create_the_folder(void) {
-  mkdir("post", 0755);
-  mkdir("public", 0755);
-  mkdir("themes", 0755);
+
+int create_the_folder() {
+  if (mkdir("post", 0755) == -1) {
+    perror("Gak bisa bikin folder 'post'");
+    return 1;
+}
+  if (mkdir("public", 0755) == -1) {
+    perror("Gak bisa bikin folder 'post'");
+    return 1;
+}
+  if (mkdir("themes", 0755) == -1) {
+    perror("Gak bisa bikin folder 'post'");
+    return 1;
+}
+  return 0;
 }
     
 int main(int argc, char *argv[]) { 
