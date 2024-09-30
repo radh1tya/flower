@@ -27,10 +27,10 @@ int main(void) {
       // untuk variable input file, lebih baik memorinya
       // disimpan di heap dengan malloc()
       // @TODO alokasi 256 bytes heap memori ke input_file
-      char input_file[256];
+      char *input_file = malloc(265);
       FILE *fp;
 
-      snprintf(input_file, sizeof(input_file), "post/%s", de->d_name);
+      snprintf(input_file, 265, "post/%s", de->d_name);
       fp = fopen(input_file, "r");
 
       if (fp == NULL) {
@@ -38,10 +38,10 @@ int main(void) {
         return 1;
       }
 
-      char output_file[256];
+      char *output_file = malloc(265);
       char *ext;
 
-      snprintf(output_file, sizeof(output_file), "public/%s", de->d_name);
+      snprintf(output_file, 265, "public/%s", de->d_name);
       ext = strrchr(output_file, '.');
 
       if (ext != NULL) {
