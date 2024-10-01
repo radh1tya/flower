@@ -20,7 +20,8 @@ enum ElementType {
   BOLD = 11,
   ITALIC = 12,
   BLOCKQUOTE = 13,
-  CODE = 14
+  CODE = 14,
+  LIST = 15
 };
 
 typedef struct {
