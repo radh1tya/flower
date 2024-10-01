@@ -80,22 +80,22 @@ MarkdownElement do_list(char **current) {
   element.content = malloc(256);
   char *output = element.content;
   (*current)++;
-  output += sprintf(output, "<ul>");
-      
-      
-  output += sprintf(output, "<li>");
 
+    while (**current == ' ') {
+    (*current)++;
+  }
+    
+  output += sprintf(output, "<li>");
+    
   while(**current != '-' && **current != '\0') {
+       if (**current == '-' && *(*current - 1) == '\n') {
+	 break;
+       }
     *output++ = **current;
     (*current)++;
   }
+output += sprintf(output, "</li>");
 
-  if ( **current == '-') {
-    (*current)++;
-    output += sprintf(output, "</li>");
-  }
-
-  output += sprintf(output, "</ul>");
   *output = '\0';
   element.type = LIST;
   return element;
@@ -232,34 +232,46 @@ void include_style(void) {
 }
 
 void parsing(FILE *file, FILE *fw) {
-  fprintf(fw, "<html>\n<head>\n<link rel=\"stylesheet\" href=\"style.css\">\n</head>\n");
+  bool in_list = false;  
+  fprintf(fw, "<!DOCTYPE html>\n<head>\n<link rel=\"stylesheet\" href=\"style.css\">\n</head>\n");
   fprintf(fw, "<body>\n");
 
   char line[256];
   while (fgets(line, sizeof(line), file)) {
     line[strcspn(line, "\n")] = 0;
     MarkdownElement element = detect_md(line);
+
     if (element.type >= 1 && element.type <= 6) {
+      if (in_list) {
+        fprintf(fw, "</ul>\n");
+        in_list = false;
+      }
       fprintf(fw, "<h%d>%s</h%d>\n", element.type, element.content, element.type);
-    } else if (element.type == CODE) {
-      fprintf(fw, "%s\n", element.content);
-    }
-    else if (element.type == BOLD) {
-      fprintf(fw, "%s\n", element.content);
-    } else if (element.type == ITALIC) {
-      fprintf(fw, "%s\n", element.content);
-    } else if (element.type == BLOCKQUOTE) {
+    } else if (element.type == CODE || element.type == BOLD || element.type == ITALIC || element.type == BLOCKQUOTE) {
+      if (in_list) {
+        fprintf(fw, "</ul>\n");
+        in_list = false;
+      }
       fprintf(fw, "%s\n", element.content);
     } else if (element.type == LIST) {
-      fprintf(fw, "%s\n", element.content);
-    }
-    else if (element.type == PARAGRAPH) {
+      if (!in_list) {
+        fprintf(fw, "<ul>\n");
+        in_list = true;
+      }
+      fprintf(fw, "<li>%s</li>\n", element.content);
+    } else if (element.type == PARAGRAPH) {
+      if (in_list) {
+        fprintf(fw, "</ul>\n");
+        in_list = false;
+      }
       fprintf(fw, "<p>%s</p>\n", element.content);
     }
-    else {
-      fprintf(fw, "%s", element.content);
-    };
+
     free(element.content);
   }
+  if (in_list) {
+    fprintf(fw, "</ul>\n");
+  }
+
   fprintf(fw, "</body>\n</html>\n");
 }
