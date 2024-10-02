@@ -1,9 +1,9 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include "../include/parsing.h"
 #include <dirent.h>
 #include <stdbool.h>
-#include "../include/parsing.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 MarkdownElement do_code(char **current) {
   MarkdownElement element;
@@ -13,7 +13,8 @@ MarkdownElement do_code(char **current) {
   (*current)++;
   output += sprintf(output, "<code>");
 
-  while (strncmp(*current, "`", 1) != 0 && strncmp(*current, "``", 2) && **current != '\0') {
+  while (strncmp(*current, "`", 1) != 0 && strncmp(*current, "``", 2) &&
+         **current != '\0') {
     *output++ = **current;
     (*current)++;
   }
@@ -36,12 +37,12 @@ MarkdownElement do_bold(char **current) {
 
   *current += 2;
   output += sprintf(output, "<b>");
-    
+
   while (strncmp(*current, "**", 2) != 0 && **current != '\0') {
     *output++ = **current;
     (*current)++;
   }
-    
+
   if (strncmp(*current, "**", 2) == 0) {
     *current += 2;
     output += sprintf(output, "</b>");
@@ -65,7 +66,7 @@ MarkdownElement do_italic(char **current) {
     (*current)++;
   }
 
-  if (**current == '_' || **current == '*' ) {
+  if (**current == '_' || **current == '*') {
     (*current)++;
     output += sprintf(output, "</i>");
   }
@@ -81,20 +82,20 @@ MarkdownElement do_list(char **current) {
   char *output = element.content;
   (*current)++;
 
-    while (**current == ' ') {
+  while (**current == ' ') {
     (*current)++;
   }
-    
+
   output += sprintf(output, "<li>");
-    
-  while(**current != '-' && **current != '\0') {
-       if (**current == '-' && *(*current - 1) == '\n') {
-	 break;
-       }
+
+  while (**current != '-' && **current != '\0') {
+    if (**current == '-' && *(*current - 1) == '\n') {
+      break;
+    }
     *output++ = **current;
     (*current)++;
   }
-output += sprintf(output, "</li>");
+  output += sprintf(output, "</li>");
 
   *output = '\0';
   element.type = LIST;
@@ -104,7 +105,7 @@ MarkdownElement detect_md(char *line) {
   MarkdownElement element;
   element.type = PARAGRAPH;
   element.content = malloc(strlen(line) * 10);
-    
+
   if (line[0] == '#') {
     int count = 0;
     while (line[count] == '#') {
@@ -114,7 +115,7 @@ MarkdownElement detect_md(char *line) {
     snprintf(element.content, strlen(line), "%s", line + count + 1);
     return element;
   }
-    
+
   char *current = line;
   char *output = element.content;
 
@@ -124,57 +125,51 @@ MarkdownElement detect_md(char *line) {
       strlcpy(output, boldElement.content, strlen(boldElement.content) + 1);
       output += strlen(boldElement.content);
       free(boldElement.content);
-    }
-    else if (*current == '>') {
+    } else if (*current == '>') {
       current++;
       output += sprintf(output, "<blockquote>");
       while (*current != '\0' && *current != '\n') {
-	if (strncmp(current, "**", 2) == 0) {
-	  MarkdownElement boldElement = do_bold(&current);
-	  strlcpy(output, boldElement.content, strlen(boldElement.content) + 1);
-	  output += strlen(boldElement.content);
-	  free(boldElement.content);
-	}
-	
-	else if (*current == '-') {
-	  MarkdownElement listElement = do_list(&current);
-	  strlcpy(output, listElement.content,strlen(listElement.content) + 1);
-	  output += strlen(listElement.content);
-	  free(listElement.content);
-	}
-		
-		
-	else if (*current == '_' || *current == '*') {
-	  MarkdownElement italicElement = do_italic(&current);
-	  strlcpy(output, italicElement.content, strlen(italicElement.content) + 1);
-	  output += strlen(italicElement.content);
-	  free(italicElement.content);
-	}
-	else {
-	  *output++ = *current++;
-	}
+        if (strncmp(current, "**", 2) == 0) {
+          MarkdownElement boldElement = do_bold(&current);
+          strlcpy(output, boldElement.content, strlen(boldElement.content) + 1);
+          output += strlen(boldElement.content);
+          free(boldElement.content);
+        }
+
+        else if (*current == '-') {
+          MarkdownElement listElement = do_list(&current);
+          strlcpy(output, listElement.content, strlen(listElement.content) + 1);
+          output += strlen(listElement.content);
+          free(listElement.content);
+        }
+
+        else if (*current == '_' || *current == '*') {
+          MarkdownElement italicElement = do_italic(&current);
+          strlcpy(output, italicElement.content,
+                  strlen(italicElement.content) + 1);
+          output += strlen(italicElement.content);
+          free(italicElement.content);
+        } else {
+          *output++ = *current++;
+        }
       }
       output += sprintf(output, "</blockquote>");
-    }
-    else if (*current == '_' || *current == '*') {
+    } else if (*current == '_' || *current == '*') {
       MarkdownElement italicElement = do_italic(&current);
-      strlcpy(output, italicElement.content,strlen(italicElement.content) + 1);
+      strlcpy(output, italicElement.content, strlen(italicElement.content) + 1);
       output += strlen(italicElement.content);
       free(italicElement.content);
-    }
-    else if (*current == '`') {
+    } else if (*current == '`') {
       MarkdownElement codeElement = do_code(&current);
-      strlcpy(output, codeElement.content,strlen(codeElement.content) + 1);
+      strlcpy(output, codeElement.content, strlen(codeElement.content) + 1);
       output += strlen(codeElement.content);
       free(codeElement.content);
-    }
-    else if (*current == '-') {
+    } else if (*current == '-') {
       MarkdownElement listElement = do_list(&current);
-      strlcpy(output, listElement.content,strlen(listElement.content) + 1);
+      strlcpy(output, listElement.content, strlen(listElement.content) + 1);
       output += strlen(listElement.content);
       free(listElement.content);
-    }
-    else {
+    } else {
       *output++ = *current++;
     }
   }
@@ -200,23 +195,23 @@ void include_style(void) {
 
       FILE *src = fopen(src_path, "r");
       if (src == NULL) {
-	fprintf(stderr, "404: Gak bisa buka %s\n", src_path);
-	closedir(dr_css);
-	return;
+        fprintf(stderr, "404: Gak bisa buka %s\n", src_path);
+        closedir(dr_css);
+        return;
       }
 
       FILE *dest = fopen("public/style.css", "w");
       if (dest == NULL) {
-	fprintf(stderr, "Galat membuat public/style.css\n");
-	fclose(src);
-	closedir(dr_css);
-	return;
+        fprintf(stderr, "Galat membuat public/style.css\n");
+        fclose(src);
+        closedir(dr_css);
+        return;
       }
 
       char buffer[1024];
       size_t bytes;
       while ((bytes = fread(buffer, 1, sizeof(buffer), src)) > 0) {
-	fwrite(buffer, 1, bytes, dest);
+        fwrite(buffer, 1, bytes, dest);
       }
       fclose(src);
       fclose(dest);
@@ -232,8 +227,9 @@ void include_style(void) {
 }
 
 void parsing(FILE *file, FILE *fw) {
-  bool in_list = false;  
-  fprintf(fw, "<!DOCTYPE html>\n<head>\n<link rel=\"stylesheet\" href=\"style.css\">\n</head>\n");
+  bool in_list = false;
+  fprintf(fw, "<!DOCTYPE html>\n<head>\n<link rel=\"stylesheet\" "
+              "href=\"style.css\">\n</head>\n");
   fprintf(fw, "<body>\n");
 
   char line[256];
@@ -246,8 +242,10 @@ void parsing(FILE *file, FILE *fw) {
         fprintf(fw, "</ul>\n");
         in_list = false;
       }
-      fprintf(fw, "<h%d>%s</h%d>\n", element.type, element.content, element.type);
-    } else if (element.type == CODE || element.type == BOLD || element.type == ITALIC || element.type == BLOCKQUOTE) {
+      fprintf(fw, "<h%d>%s</h%d>\n", element.type, element.content,
+              element.type);
+    } else if (element.type == CODE || element.type == BOLD ||
+               element.type == ITALIC || element.type == BLOCKQUOTE) {
       if (in_list) {
         fprintf(fw, "</ul>\n");
         in_list = false;
