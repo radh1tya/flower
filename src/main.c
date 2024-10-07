@@ -71,9 +71,10 @@ int main(int argc, char *argv[]) {
         char *ext = strrchr(output_file, '.');
 
         if (ext != NULL) {
-          // strcpy(ext, ".html");
+          strcpy(ext, ".html");
           // did you expect "public/foo.md.html" ?
-          strcat(ext, ".html");
+	  // no, i did not. ~al1r4d
+          //strcat(ext, ".html");
         }
 
         include_style();
