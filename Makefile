@@ -7,19 +7,19 @@ UNLINK = -c
 # ELF Symbols remover
 # using llvm-objcopy for LLVM
 # using objcopy for GNU/Binutils
-STRIPPER 	= objcopy
-LLVM-STRIPPER 	= llvm-$(STRIPPER)
-STRIP-OPTION	= --strip-unneeded
+STRIPPER = objcopy
+LLVM-STRIPPER = llvm-$(STRIPPER)
+STRIP-OPTION = --strip-unneeded
 
 # ELF Reader
-READELF		= readelf
-LLVM-READELF	= llvm-$(READELF)
+READELF	= readelf
+LLVM-READELF = llvm-$(READELF)
 READ-OPTION	= -hS
 
 # File
-SRC    = src/*.c
-OUT    = *.o
-OBJ    = flower
+SRC = src/*.c
+OUT = *.o
+OBJ = flower
 
 # make install
 install:
