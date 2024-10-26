@@ -13,5 +13,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: gcc install
+      run: apt-get instal software-properties-common -y
+      run: add-apt-repository universe
+      run: apt-get update
+      run: apt-get install build-essential -y
+      run: apt clean
+      run: apt autoclean
     - name: make install
-      run: make install -j 8
+      run: make install
