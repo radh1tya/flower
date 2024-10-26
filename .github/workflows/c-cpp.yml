@@ -14,6 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: gcc install
-      run: apt-get install software-properties-common -y && add-apt-repository universe && apt-get update && apt-get install build-essential -y && apt clean && apt autoclean
+      run: sudo apt-get install software-properties-common -y && sudo add-apt-repository universe && sudo apt-get update && sudo apt-get install build-essential -y && sudo apt clean && sudo apt autoclean
     - name: make install
       run: make install
