@@ -7,14 +7,14 @@ UNLINK = -c
 # ELF Symbols remover
 # using llvm-objcopy for LLVM
 # using objcopy for GNU/Binutils
-STRIPPER 		= objcopy
+STRIPPER 	= objcopy
 LLVM-STRIPPER 	= llvm-$(STRIPPER)
 STRIP-OPTION	= --strip-unneeded
 
 # ELF Reader
-READELF			= readelf
+READELF		= readelf
 LLVM-READELF	= llvm-$(READELF)
-READ-OPTION		= -hS
+READ-OPTION	= -hS
 
 # File
 SRC    = src/*.c
