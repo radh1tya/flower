@@ -1,0 +1,1 @@
+void _(void);

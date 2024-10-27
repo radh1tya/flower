@@ -7,3 +7,5 @@
 *.dll
 test/
 themes/
+CMakeFiles/
+CMakeCache.txt
