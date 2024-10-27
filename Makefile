@@ -1,7 +1,7 @@
 # Compiler option
 CC     = cc
-FLAG   = -Os -Wall -Werror -Wextra -Wpedantic \
-		 -std=gnu2x -Wunreachable-code
+FLAG   = -O3 -Wall -Werror -Wextra -Wpedantic \
+		 -std=gnu99 -Wunreachable-code
 UNLINK = -c
 
 # ELF Symbols remover
@@ -15,6 +15,11 @@ STRIP-OPTION = --strip-unneeded
 READELF	= readelf
 LLVM-READELF = llvm-$(READELF)
 READ-OPTION	= -hS
+
+# Disassembler
+OBJDUMP = objdump
+LLVM-OBJDUMP = llvm-$(OBJDUMP)
+OBJDUMP-OPTION = --disassemble
 
 # File
 SRC = src/*.c
@@ -31,6 +36,10 @@ debug:
 	$(CC) $(SRC) $(UNLINK)
 	$(CC) $(OUT) -o $(OBJ)
 
+# make run
+run: $(OBJ)
+	./$(OBJ)
+
 # make gnu-strip
 gnu-strip: $(OBJ)
 	$(STRIPPER) $(STRIP-OPTION) $(OBJ)
@@ -46,6 +55,14 @@ gnu-readelf: $(OBJ)
 # make llvm-readelf
 llvm-readelf: $(OBJ)
 	$(LLVM-READELF) $(READ-OPTION) $(OBJ)
+
+# make gnu-objdump
+gnu-objdump: $(OBJ)
+	$(OBJDUMP) $(OBJDUMP-OPTION) $(OBJ)
+
+# make llvm-objdump
+llvm-objdump: $(OBJ)
+	$(LLVM-OBJDUMP) $(OBJDUMP-OPTION) $(OBJ)
 
 # make clean
 clean: $(OUT) $(OBJ)
