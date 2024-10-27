@@ -21,10 +21,21 @@ int main(int argc, char **argv) {
   // jadi jika itu terjadi, return EX_USAGE dari [sysexits.h] dan print help
   // message
   if (argc == 1) {
-    char *s = readstr("src/main.c");
+    String str = with_capacity(6);
 
-    printf("%s", s);
-    free(s);
+    pushstr(&str, "Awa");
+    pushchr(&str, 'n');
+    pushchr(&str, 'g');
+    pushchr(&str, ' ');
+    pushchr(&str, 'C');
+    pushchr(&str, 'o');
+    pushchr(&str, 'y');
+
+    printf("String:   %s\n", str.ptr);
+    printf("Length:   %li\n", str.length);
+    printf("Capacity: %li\n", str.capacity);
+
+    freestr(str);
 
     return EX_USAGE;
   }

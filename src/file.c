@@ -69,9 +69,27 @@ char *readstr(char *path) {
 }
 
 // @TODO
-// String readstring(char *path) {
-//   FILE *file;
-//   String buffer;
+String read_to_string(char *path) {
+  const uint16_t MAX_STRING_MEMORY_ALLOWED = 2048;
 
-//   return buffer;
-// }
+  FILE *file;
+  String bufferline, heap_buffer;
+  bool failed;
+
+  if (is_null(file = fopen(path, "r+"))) {
+    printerr("%s\n");
+    exit(EXIT_FAILURE);
+  }
+
+  bufferline = with_capacity(2048);
+  heap_buffer = newstr();
+
+  while (!is_null(fgets(bufferline.ptr, MAX_STRING_MEMORY_ALLOWED, file))) {
+    pushstr(&heap_buffer, bufferline.ptr);
+  }
+
+  fclose(file);
+  freestr(bufferline);
+
+  return heap_buffer;
+}

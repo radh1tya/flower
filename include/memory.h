@@ -37,10 +37,6 @@ extern "C" {
 #define ERROR strerror(errno)
 #define printerr(FMT) fprintf(stderr, FMT, ERROR)
 
-// ASCII-based string wrapper arround char * C
-// Tipe ini mengabstraksi char *, untuk menyediakan API yang
-// lebih memory-safe
-
 #ifndef FLOWER_STRING
 #define FLOWER_STRING
 #define freestr(STRING)                                                        \
@@ -49,18 +45,32 @@ extern "C" {
     STRING.ptr = NULL;                                                         \
   } while (0);
 
+// ASCII-based string wrapper arround char * C
+// Tipe ini mengabstraksi char *, untuk menyediakan API yang
+// lebih memory-safe.
 typedef struct String {
+  // Pointer yang menunjuk ke item pertama dari char*.
+  // Bersifat dynamic.
   char *ptr;
+
 #ifdef __STDDEF_H
+  // Panjang dari 'ptr', nilai harus lebih kecil dari
+  // 'capacity'.
   size_t length;
+
+  // Kapasitas dari String, nilai bisa lebih besar dari
+  // 'length', direpresentasikan dalam bentuk bytes.
+  size_t capacity;
 #else
   unsigned long length;
+  unsigned long capacity;
 #endif
 } String;
 
 String newstr(void);
 String fromstr(char *str);
 String copystr(String *src);
+String with_capacity(size_t size);
 void pushchr(String *dst, int ch);
 void pushstr(String *dst, char *src);
 

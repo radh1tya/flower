@@ -7,6 +7,7 @@ extern "C" {
 #include "memory.h"
 
 char *readstr(char *path);
+String read_to_string(char *path);
 
 #ifdef __cplusplus
 }
