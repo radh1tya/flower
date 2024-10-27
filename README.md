@@ -14,4 +14,8 @@
    cmake --build .
    ```
 
+<<<<<<< HEAD
 Forked from [radh1thya/flower](https://github.com/radh1tya/flower.git).
+=======
+Forked from [radh1thya/flower](https://github.com/radh1tya/flower.git).
+>>>>>>> 4b89891dd1eed851c693fc95cb4ebefa4a0030e3
