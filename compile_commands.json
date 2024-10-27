@@ -1,0 +1,26 @@
+[
+{
+  "directory": "/data/data/com.termux/files/home/dev/flower",
+  "command": "/data/data/com.termux/files/usr/bin/cc  -I/data/data/com.termux/files/home/dev/flower/include -O2 -g -DNDEBUG -o CMakeFiles/flower.dir/src/main.c.o -c /data/data/com.termux/files/home/dev/flower/src/main.c",
+  "file": "/data/data/com.termux/files/home/dev/flower/src/main.c",
+  "output": "CMakeFiles/flower.dir/src/main.c.o"
+},
+{
+  "directory": "/data/data/com.termux/files/home/dev/flower",
+  "command": "/data/data/com.termux/files/usr/bin/cc  -I/data/data/com.termux/files/home/dev/flower/include -O2 -g -DNDEBUG -o CMakeFiles/flower.dir/src/file.c.o -c /data/data/com.termux/files/home/dev/flower/src/file.c",
+  "file": "/data/data/com.termux/files/home/dev/flower/src/file.c",
+  "output": "CMakeFiles/flower.dir/src/file.c.o"
+},
+{
+  "directory": "/data/data/com.termux/files/home/dev/flower",
+  "command": "/data/data/com.termux/files/usr/bin/cc  -I/data/data/com.termux/files/home/dev/flower/include -O2 -g -DNDEBUG -o CMakeFiles/flower.dir/src/memory.c.o -c /data/data/com.termux/files/home/dev/flower/src/memory.c",
+  "file": "/data/data/com.termux/files/home/dev/flower/src/memory.c",
+  "output": "CMakeFiles/flower.dir/src/memory.c.o"
+},
+{
+  "directory": "/data/data/com.termux/files/home/dev/flower",
+  "command": "/data/data/com.termux/files/usr/bin/cc  -I/data/data/com.termux/files/home/dev/flower/include -O2 -g -DNDEBUG -o CMakeFiles/flower.dir/src/lexer.c.o -c /data/data/com.termux/files/home/dev/flower/src/lexer.c",
+  "file": "/data/data/com.termux/files/home/dev/flower/src/lexer.c",
+  "output": "CMakeFiles/flower.dir/src/lexer.c.o"
+}
+]

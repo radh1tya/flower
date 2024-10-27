@@ -1,6 +1,7 @@
 #include "file.h"
 #include "memory.h"
 #include <stdint.h>
+#include <stdbool.h>
 
 /*
  * @API
@@ -27,7 +28,7 @@ char *readstr(char *path) {
 
   FILE *file;
   char *heap_buff, *bufferline;
-  uint8_t is_fail;
+  bool is_fail;
 
   if (is_null(file = fopen(path, "r"))) {
     printerr("%s\n");
@@ -68,9 +69,9 @@ char *readstr(char *path) {
 }
 
 // @TODO
-String readstring(char *path) {
-  FILE *file;
-  String buffer;
+// String readstring(char *path) {
+//   FILE *file;
+//   String buffer;
 
-  return buffer;
-}
+//   return buffer;
+// }
